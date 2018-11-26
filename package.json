@@ -1,8 +1,7 @@
 {
   "name": "jsonwebtokenydoo",
   "version": "1.1.0",
-  "description":
-    "Command line utility that assists with GitHub App Authentication",
+  "description": "Command line utility that assists with GitHub App Authentication",
   "bin": {
     "ghtoken": "./bin/jsonwebtokenydoo.js",
     "jsonwebtokenydoo": "./bin/jsonwebtokenydoo.js"
@@ -10,12 +9,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["github", "app", "jwt", "json", "web", "token"],
+  "keywords": [
+    "github",
+    "app",
+    "jwt",
+    "json",
+    "web",
+    "token"
+  ],
   "author": "Wilhelm Klopp",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
     "chalk": "^2.4.1",
+    "clipboardy": "^1.2.3",
     "dotenv": "^5.0.1",
     "inquirer": "^5.2.0",
     "jsonwebtoken": "^8.2.1"

@@ -4,9 +4,12 @@ const inquirer = require("inquirer");
 const jwt = require("jsonwebtoken");
 const chalk = require("chalk");
 const axios = require("axios");
+const clipboardy = require("clipboardy");
 require("dotenv").config();
 
 const { findPrivateKey } = require("../lib/private-key");
+
+const BASE_URL = process.env.BASE_URL || "https://api.github.com"
 
 function printInstallationCurl(jwt, url, resourceNameOrId) {
   const completeUrl = url.replace(":something", chalk.bold(resourceNameOrId));
@@ -56,13 +59,16 @@ async function main() {
       signedJWT
     )}\n\n`
   );
-  let { installationId } = await inquirer.prompt([
-    {
-      type: "input",
-      name: "installationId",
-      message: "Do you know the installation id? (Leave blank if not)"
-    }
-  ]);
+  let installationId = process.env.INSTALLATION_ID;
+  if (!installationId) {
+    ({ installationId } = await inquirer.prompt([
+      {
+        type: "input",
+        name: "installationId",
+        message: "Do you know the installation id? (Leave blank if not)"
+      }
+    ]));
+  }
   if (!installationId) {
     const { resource } = await inquirer.prompt([
       {
@@ -97,21 +103,21 @@ async function main() {
         if (idAnswer === "name") {
           printInstallationCurl(
             signedJWT,
-            "https://api.github.com/users/:something/installation",
+            `${BASE_URL}/users/:something/installation`,
             resourceNameOrId
           );
           response = await axios.get(
-            `https://api.github.com/users/${resourceNameOrId}/installation`,
+            `${BASE_URL}/users/${resourceNameOrId}/installation`,
             config
           );
         } else {
           printInstallationCurl(
             signedJWT,
-            "https://api.github.com/user/:something/installation",
+            `${BASE_URL}/user/:something/installation`,
             resourceNameOrId
           );
           response = await axios.get(
-            `https://api.github.com/user/${resourceNameOrId}/installation`,
+            `${BASE_URL}/user/${resourceNameOrId}/installation`,
             config
           );
         }
@@ -119,32 +125,32 @@ async function main() {
         if (idAnswer === "name") {
           printInstallationCurl(
             signedJWT,
-            "https://api.github.com/orgs/:something/installation",
+            `${BASE_URL}/orgs/:something/installation`,
             resourceNameOrId
           );
           response = await axios.get(
-            `https://api.github.com/orgs/${resourceNameOrId}/installation`,
+            `${BASE_URL}/orgs/${resourceNameOrId}/installation`,
             config
           );
         } else {
           printInstallationCurl(
             signedJWT,
-            "https://api.github.com/organizations/:something/installation",
+            `${BASE_URL}/organizations/:something/installation`,
             resourceNameOrId
           );
           response = await axios.get(
-            `https://api.github.com/organizations/${resourceNameOrId}/installation`,
+            `${BASE_URL}/organizations/${resourceNameOrId}/installation`,
             config
           );
         }
       } else {
         printInstallationCurl(
           signedJWT,
-          "https://api.github.com/repositories/:something/installation",
+          `${BASE_URL}/repositories/:something/installation`,
           resourceNameOrId
         );
         response = await axios.get(
-          `https://api.github.com/repositories/${resourceNameOrId}/installation`,
+          `${BASE_URL}/repositories/${resourceNameOrId}/installation`,
           config
         );
       }
@@ -160,14 +166,14 @@ async function main() {
     "curl -i -X POST \\\n",
     `-H "Authorization: Bearer ${chalk.green(signedJWT)}" \\\n`,
     '-H "Accept: application/vnd.github.machine-man-preview+json" \\\n',
-    `https://api.github.com/installations/${chalk.bold(
+    `${BASE_URL}/installations/${chalk.bold(
       installationId
     )}/access_tokens`
   );
   let data;
   try {
     ({ data } = await axios.post(
-      `https://api.github.com/installations/${installationId}/access_tokens`,
+      `${BASE_URL}/installations/${installationId}/access_tokens`,
       null,
       config
     ));
@@ -186,6 +192,7 @@ async function main() {
     )} ✨`
     // here is a request you can make to get you started
   );
+  clipboardy.writeSync(data.token);
 }
 
 main();
