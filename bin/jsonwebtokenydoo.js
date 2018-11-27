@@ -9,7 +9,7 @@ require("dotenv").config();
 
 const { findPrivateKey } = require("../lib/private-key");
 
-const BASE_URL = process.env.BASE_URL || "https://api.github.com"
+const BASE_URL = process.env.BASE_URL || (process.env.GHE_HOST ? `https://${process.env.GHE_HOST}/api` : "https://api.github.com")
 
 function printInstallationCurl(jwt, url, resourceNameOrId) {
   const completeUrl = url.replace(":something", chalk.bold(resourceNameOrId));
@@ -193,6 +193,11 @@ async function main() {
     // here is a request you can make to get you started
   );
   clipboardy.writeSync(data.token);
+  console.log(
+    `The token has been ${chalk.keyword("cyan")(
+      "copied to the clipboard"
+    )} 📋`
+  );
 }
 
 main();

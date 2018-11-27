@@ -19,6 +19,10 @@ export PATH=${PATH}:node_modules/.bin/
 
 `jsonwebtokenydoo` will automatically detect your app id if it's set as an `APP_ID` environment variable via your `.env` file. If it can't detect your app id, it will ask you for it.
 
+If you already know the `installationId` you can specify it with the `INSTALLATION_ID`. Otherwise `jsonwebtokenydoo` will ask for it or calculate it for you.
+
+`jsonwebtokenydoo` supports GitHub enterprise when defining the `GHE_HOST` env variable. You can also define the full baseUrl passed to Octokit with the `BASE_URL` env variable, that can include a different protocol and/or path. `BASE_URL` takes precedence over `GHE_HOST`.
+
 ## Run directly
 
 Don't want to install `jsonwebtokenydoo` as a dev dependency?
