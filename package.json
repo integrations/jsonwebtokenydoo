@@ -20,7 +20,7 @@
   "author": "Wilhelm Klopp",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.26.0",
+    "axios": "^1.8.2",
     "chalk": "^2.4.1",
     "dotenv": "^5.0.1",
     "inquirer": "^5.2.0",
